@@ -1,0 +1,73 @@
+services:
+  jellyfin:
+    container_name: jellyfin
+    image: lscr.io/linuxserver/jellyfin:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Belgrade
+    ports:
+      - 8096:8096
+      - 8920:8920
+    volumes:
+      - /home/jovan/containers/starr/config/jellyfin:/config
+      - /media/movies:/media/movies  # Moives
+      - /media/tv:/media/tv  #TV
+    restart: unless-stopped
+  sonarr:
+    container_name: sonarr
+    image: lscr.io/linuxserver/sonarr:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Belgrade
+    ports:
+      - 8989:8989
+    volumes:
+      - /home/jovan/containers/starr/config/sonarr:/config
+      - /media/tv:/media/tv # TV
+      - /media/downloads/tv:/media/downloads/tv # Downloads
+    restart: unless-stopped
+  radarr:
+    container_name: radarr
+    image: lscr.io/linuxserver/radarr:latest
+    environment: 
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Belgrade
+    ports:
+      - 7878:7878
+    volumes: 
+      - /home/jovan/containers/starr/config/radarr:/config
+      - /media/movies:/media/movies # Movies
+      - /media/downloads/movies:/media/downloads/movies # Downloads
+    restart: unless-stopped
+  prowlarr:
+    container_name: prowlarr
+    image: lscr.io/linuxserver/prowlarr:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Belgrade
+    ports:
+      - 9696:9696
+    volumes:
+      - /home/jovan/containers/starr/config/prowlarr:/config
+    restart: unless-stopped
+  qbittorrent:
+    container_name: qbittorrent
+    image: lscr.io/linuxserver/qbittorrent:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Belgrade
+      - WEBUI_PORT=8080
+      - TORRENTING_PORT=6881
+    volumes:
+      - /home/jovan/containers/starr/config/qbittorrent:/config
+      - /media/downloads:/media/downloads # Downloads
+    ports:
+      - 8080:8080
+      - 6881:6881
+      - 6881:6881/udp
+    restart: unless-stopped
